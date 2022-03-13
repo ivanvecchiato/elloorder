@@ -1,86 +1,60 @@
 <template>
   <div class="home">
-    <b-modal ref="cart-modal" hide-footer hide-header :key="rand">
-      <Cart
-        :place="place"
-        @confirmOrder="confirmOrder"></Cart>
-    </b-modal>
-
     <div class="clearfix header">
     </div>
 
     <vue-horizontal class="horizontal-selectors">
-      <div v-for="cat in categorie"
-        class="inner-content"
-        :key="cat.id"
-        @click="goTo(cat.id)">
-        {{cat.name}}
+      <div v-for="area in park"
+        class="horizontal-selector"
+        :key="area.id"
+        @click="selectArea(area)">
+        {{area.name}}
       </div>
     </vue-horizontal>
 
-    <suggested
+    <piano-tavoli
       v-if="dataLoaded"
-      :place="place"
-      @cartUpdate="cartUpdate"/>
+      :area="currentArea"
+      @refresh="refresh"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Suggested from '@/views/Suggested.vue'
+import PianoTavoli from '@/views/Tavoli/PianoTavoli.vue'
 import Firebase from "../firebase.js";
 import VueHorizontal from 'vue-horizontal';
 import products from '../store/products'
 import categories from '../store/categories'
-import shoppingcart from '@/store/shoppingcart'
-import Cart from './Cart.vue'
+import Conto from "@/data/Conto.js";
 
 export default {
   name: 'Home',
   components: {
-    Suggested,
-    VueHorizontal,
-    Cart
+    PianoTavoli,
+    VueHorizontal
   },
   props: ['place'],
   data() {
     return {
+      park: [],
       categorie: [],
       dataLoaded: false,
-      gettingLocation: false,
-      cartQuantity: 0
+      currentArea: null
     }
   },
   methods: {
     rand: function() {
       return Math.random()
     },
-    confirmOrder() {
-      this.$refs['cart-modal'].hide()
-      this.reset();
-    },
-    showCart: function() {
-      this.$refs['cart-modal'].show()
-    },
-    cartUpdate: function() {
-      this.getCartQuantity();
-    },
-    getCartQuantity: function() {
-      this.cartQuantity = shoppingcart.getQuantity();
+    refresh: function() {
     },
     getIconUrl: function (pic) {
       if (pic.length === 0) return require('../assets/img/po.png')
       return require('../assets/icons/' + pic)
     },
-    goTo: function(category) {
-      console.log(category)
-      this.$router.push({
-        name: 'Catalog',
-        params: {
-          place: this.place,
-          selectedCategory: category}
-        }
-      )
+    selectArea: function(area) {
+      this.currentArea = area;
     },
     addCategoryIfNew(c) {
       var found = false;
@@ -108,6 +82,27 @@ export default {
         })
         categories.setList(this.categorie);
         products.setProducts(items);
+      });
+    },
+    loadPlaces() {
+      var ref = Firebase.db.collection("park").orderBy('id');
+      
+      ref.onSnapshot((snapshotChange) => {
+        this.park = [];
+        snapshotChange.forEach((doc) => {
+          var area = doc.data();
+          area.docId = doc.id;
+          var places = area.places;
+          for(var n in places) {
+            if(places[n].conto != null) {
+              var conto = new Conto;
+              conto.fillData(places[n].conto);
+              places[n].conto = conto;
+            }
+            places[n].key = n;
+          }
+          this.park.push(area);
+        })
         this.dataLoaded = true;
       });
     },
@@ -130,7 +125,7 @@ export default {
     },
   },
   mounted() {
-
+    this.loadPlaces();
     this.loadProducts();
   },
 }
@@ -145,44 +140,21 @@ export default {
 }
 
 .horizontal-selectors {
-    padding: 2px;
+    padding: 10px;
 }
 .horizontal-selector {
-    margin-left: 5px;
-    margin-right: 5px;
-}
-.outer {
-  display: flex;
-  flex: 1;
-  width: auto;
-  height: 100%;
-  padding: 0 15px;
-  flex-flow: row nowrap;
-  align-items: center;
-}
-.inner-content {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   text-align: center;
   min-width: 100px;
-  margin-right: 10px;
+  line-height: 35px;
+  margin-right: 5px;
   background: white;
   border-radius: 30px;
-  border: solid 1px #FFCC80;
-  font-weight: 600;
-  color: #FFCC80;
-}
-.inner-content:not(:first-of-type) {
-    margin-left: 10px;
-}
-.categorie {
-  padding: 10px;
-  margin-top: 20px;
-}
-.logo {
-  width: 60%;
-  margin: 10px;
+  border: solid 1px var(--primary-color);
+  font-weight: bold;
+  color: var(--primary-color);
 }
 .place {
   margin: 10px;
