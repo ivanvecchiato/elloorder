@@ -1,0 +1,43 @@
+{
+  "config": {
+    "parameters": "Parameters",
+    "data": "Data",
+    "rooms": "Rooms",
+    "operators": "Operators",
+    "description": "Description",
+    "no_rate": "No rate configured",
+    "no_payment": "No payment configured",
+    "ask_delete": "Delete '{description}'?"
+  },
+  "dashboard": {
+  },
+  "sidebar": {
+    "title": "Hospitality Studio",
+    "shortTitle": "HS",
+    "dashboard": "dashboard",
+    "settings": "Settings"
+  },
+  "pricelist": {
+    "popular": "Popolari",
+    "pricelist": "Listino",
+    "pricelist_config": "Configura listino"
+  },
+  "orders": {
+    "order": "Ordine",
+    "orders": "Ordini",
+    "pending": "Pendenti",
+    "done": "Eseguiti",
+    "cart_items": "{number} prodotti nell'ordine"
+  },
+  "generic": {
+    "cancel": "Annulla",
+    "ok": "OK",
+    "add": "Aggiungi",
+    "description": "Descrizione",
+    "type": "Tipo",
+    "percent": "percent",
+    "total": "Totale",
+    "save": "Salva",
+    "place": "Posto {number}"
+  }
+}
