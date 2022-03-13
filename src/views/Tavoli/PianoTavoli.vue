@@ -27,7 +27,17 @@ export default {
   },
   methods: {
     openAccount: function(item) {
-      console.log(item.conto)
+      this.$router.push({
+        name: 'Catalog',
+        params: {
+          place: {
+            id: item.key,
+            name: item.name,
+            area: this.area.name,
+            areaId: this.area.docId
+          }
+        }
+      });
     },
     loadPlaces: function() {
         console.log(this.area)

@@ -14,7 +14,7 @@
       </span>
     </div>
 
-    <horizontal-scroll class="horizontal-scroll">
+    <vue-horizontal class="horizontal-selectors">
       <div class="outer">
         <div v-for="cat in categorie"
           :key="cat.id"
@@ -27,7 +27,7 @@
           <div class="indicator" v-if="selectedCategory == cat.id"></div>
         </div>
       </div>
-    </horizontal-scroll>
+    </vue-horizontal>
 
     <ul class="list -unstyled">
       <li v-for="item in products" :key="item.id" @click="showDetails(item)">
@@ -56,8 +56,7 @@
 import categories from "../store/categories";
 import CatalogItem from './CatalogItem.vue'
 import Cart from './Cart.vue'
-import HorizontalScroll from 'vue-horizontal-scroll'
-import 'vue-horizontal-scroll/dist/vue-horizontal-scroll.css'
+import VueHorizontal from 'vue-horizontal';
 import products from '../store/products';
 import Details from './Details.vue'
 import shoppingcart from '@/store/shoppingcart'
@@ -75,7 +74,7 @@ export default {
   },
   components: {
     CatalogItem,
-    HorizontalScroll,
+    VueHorizontal,
     Details,
     Cart
   },
