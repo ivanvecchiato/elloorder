@@ -39,7 +39,6 @@ import CatalogItem from './CatalogItem.vue'
 import VueHorizontal from 'vue-horizontal';
 import products from '../store/products';
 import Details from './Details.vue'
-import shoppingcart from '@/store/shoppingcart'
 
 export default {
   props: ['place', 'selectedCategory'],
@@ -57,23 +56,6 @@ export default {
     Details
   },
   computed: {
-    rand: function() {
-      return Math.random()
-    },
-    currentCategory: function() {
-      if(this.selectedCategory == 0) {
-        return ''
-      } else {
-        for(var i=0; i<categories.length; i++) {
-          if(categories[i].id == this.selectedCategory)
-            return categories[i].name;
-        }
-        return '---';
-      }
-    },
-    cartQuantity: function() {
-      return shoppingcart.getQuantity();
-    }
   },
 
   methods: {
@@ -98,29 +80,6 @@ export default {
       //console.log("selectProducts", index);
       this.selectedCategory = categoryId;
        this.products = products.getProducts(categoryId);
-    },
-    isOrder: function() {
-      if(this.place !== undefined && this.place != '0') return true
-      else return false
-    },    
-    getImageUrl: function (pic) {
-      if (pic.length === 0) return require('@/assets/img/po.png')
-      var url = this.remoteUrl + '/img/' + pic
-      return url
-    },
-
-    getIconUrl: function (pic) {
-      if (pic.length === 0) return require('@/assets/img/po.png')
-      return require('../assets/icons/' + pic)
-    },
-
-    showCart: function() {
-      this.$refs['cart-modal'].show()
-    },
-
-    reset: function() {
-      this.notes = '';
-      shoppingcart.clear();
     }
   },
 
@@ -133,15 +92,6 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  text-align: left;
-  color: var(--primary-color);
-}
-.h1 {
-  font-weight: 900;
-  font-family: 'ProductSans';
-  letter-spacing: -2px;
-}
 .list {
   padding: 10px;
 }
@@ -154,15 +104,9 @@ ul {
   width: 100%;
   min-height: 100vh;
 }
-
-.place {
-  margin: 10px;
-  font-weight: bold;
-  font-size: 20px;
-  color: var(--secondary-color);
-}
 .horizontal-selectors {
-  padding: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 .horizontal-selector {
   text-align: center;
