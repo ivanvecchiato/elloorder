@@ -33,16 +33,16 @@ Vue.use(VueRouter)
     component: () => import('../views/Details.vue')
   },
   {
-    path: '/cart',
-    name: 'Cart',
-    props: true,
-    component: () => import('../views/Cart.vue')
-  },
-  {
     path: '/catalog/:place?',
     name: 'Catalog',
     props: true,
     component: () => import('../views/Catalog.vue')
+  },
+  {
+    path: '/comanda/:place?',
+    name: 'Comanda',
+    props: true,
+    component: () => import('../views//Tavoli/Comanda.vue')
   },
 ]
 

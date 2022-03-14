@@ -13,6 +13,7 @@
 
 <script>
 import TableItem from './TableItem.vue'
+import Conto from '@/data/Conto.js'
 
 export default {
   name: 'PianoTavoli',
@@ -27,15 +28,14 @@ export default {
   },
   methods: {
     openAccount: function(item) {
+      if(item.conto == null) {
+        item.conto = new Conto;
+      }
       this.$router.push({
-        name: 'Catalog',
+        name: 'Comanda',
         params: {
-          place: {
-            id: item.key,
-            name: item.name,
-            area: this.area.name,
-            areaId: this.area.docId
-          }
+          'item': item,
+          'place': this.area.name + ' - ' +item.name
         }
       });
     },

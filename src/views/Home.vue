@@ -103,6 +103,7 @@ export default {
           }
           this.park.push(area);
         })
+        this.currentArea = this.park[0];
         this.dataLoaded = true;
       });
     },
@@ -157,7 +158,7 @@ export default {
   color: var(--primary-color);
 }
 .place {
-  margin: 10px;
+  margin: 5px;
   font-weight: bold;
   font-size: 20px;
   color: var(--secondary-color);

@@ -1,41 +1,22 @@
 <template>
   <div class="carta">
-    <b-modal ref="cart-modal" hide-footer hide-header :key="rand">
-      <Cart
-        :place="place"
-        @confirmOrder="confirmOrder"></Cart>
-    </b-modal>
-
-    <div class="clearfix header">
-      <img style="float:left;margin:10px" width="40px" :src="getIconUrl('back.png')" @click="$router.go(-1)"/>
-      <span class="place float-right" v-if="place != undefined">
-        <img width="40px" :src="getIconUrl('order.png')" @click="showCart()"/>
-        {{cartQuantity}}
-      </span>
-    </div>
 
     <vue-horizontal class="horizontal-selectors">
-      <div class="outer">
-        <div v-for="cat in categorie"
-          :key="cat.id"
-          @click="selectProducts(cat.id)" style="text-align:center">
-          <div
-            class="inner-content"
-            :class="[selectedCategory == cat.id ? 'selected' : 'unselected']">
-            {{cat.name}}
-          </div>
-          <div class="indicator" v-if="selectedCategory == cat.id"></div>
+      <div v-for="cat in categorie"
+        :key="cat.id"
+        @click="selectProducts(cat.id)" style="text-align:center">
+        <div
+          class="horizontal-selector"
+          :class="[selectedCategory == cat.id ? 'selected' : 'unselected']">
+          {{cat.name}}
         </div>
       </div>
     </vue-horizontal>
 
     <ul class="list -unstyled">
-      <li v-for="item in products" :key="item.id" @click="showDetails(item)">
+      <li v-for="item in products" :key="item.id" @click="addOrder(item)">
         <catalog-item
-          :data='item'
-          :isOrder="isOrder()"
-          v-on:change-value="onChangeValue"
-          ref="listitem">
+          :data='item'>
         </catalog-item>
       </li>
     </ul>
@@ -55,7 +36,6 @@
 
 import categories from "../store/categories";
 import CatalogItem from './CatalogItem.vue'
-import Cart from './Cart.vue'
 import VueHorizontal from 'vue-horizontal';
 import products from '../store/products';
 import Details from './Details.vue'
@@ -65,7 +45,6 @@ export default {
   props: ['place', 'selectedCategory'],
   data() {
     return {
-      mainProps: { blankColor: '#777', width: 100, height: 120, class: 'm1' },
       products: [],
       categorie: [],
       notes: '',
@@ -75,8 +54,7 @@ export default {
   components: {
     CatalogItem,
     VueHorizontal,
-    Details,
-    Cart
+    Details
   },
   computed: {
     rand: function() {
@@ -103,6 +81,9 @@ export default {
       this.$refs['cart-modal'].hide()
       this.reset();
     },
+    addOrder(item) {
+      this.$emit('addItem', item);
+    },
     showDetails: function(item) {
       if(item.long_description.length == 0)
         return;
@@ -121,19 +102,7 @@ export default {
     isOrder: function() {
       if(this.place !== undefined && this.place != '0') return true
       else return false
-    },
-
-    onChangeValue: function(obj) {
-      var q = shoppingcart.addOrIncrement(obj);
-      var self = this;
-
-      this.$bvToast.toast(self.$t('orders.cart_items', {number: q}), {
-        title: self.$t('orders.order'),
-        variant: 'warning',
-        solid: true
-      })
-    },
-    
+    },    
     getImageUrl: function (pic) {
       if (pic.length === 0) return require('@/assets/img/po.png')
       var url = this.remoteUrl + '/img/' + pic
@@ -174,7 +143,7 @@ export default {
   letter-spacing: -2px;
 }
 .list {
-  padding: 20px;
+  padding: 10px;
 }
 ul {
   text-align: left;
@@ -185,63 +154,35 @@ ul {
   width: 100%;
   min-height: 100vh;
 }
-.footer {
-  height: 100px;
-}
-.image {
-  margin-top: -35pt;
-}
+
 .place {
   margin: 10px;
   font-weight: bold;
   font-size: 20px;
   color: var(--secondary-color);
 }
-.horizontal-scroll {
-  display: flex;
-  width: 100%;
-  margin-top: 20px;
+.horizontal-selectors {
+  padding: 10px;
 }
-.outer {
-  display: flex;
-  flex: 1;
-  width: auto;
-  height: 100%;
-  padding: 0 15px;
-  flex-flow: row nowrap;
-  align-items: center;
-}
-.inner-content {
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
+.horizontal-selector {
   text-align: center;
-  min-width: 50px;
-  margin-right: 10px;
-  line-height: 40px;
+  min-width: 100px;
+  line-height: 35px;
+  margin-right: 5px;
+  background: white;
   border-radius: 30px;
-  font-weight: bold;
+  border: solid 1px var(--primary-color);
+  font-weight: normal;
+  color: var(--primary-color);
 }
 .selected {
   font-weight: 900;
-  color: rgb(87, 81, 78);
+  color: white;
+  background: var(--primary-color);
 }
 .unselected {
-  font-weight: 600;
-  color: #FFCC80;
+  font-weight: 400;
+  color: var(--primary-color);
 }
-.indicator {
-  background: #FB8C00;
-  height: 5px;
-  width: 50%;
-  margin: auto;
-  border-radius: 20px;
-}
-.inner-content:not(:first-of-type) {
-    margin-left: 10px;
-}
-.totale {
-  font-weight: bold;
-  color: var(--info-color);
-}
+
 </style>

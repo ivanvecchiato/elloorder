@@ -1,43 +1,31 @@
 <template>
   <div>
-      <div v-if="status == 'sent'">
-        <div class="d-block text-center">
-          <b-img :src="getIconUrl('waiter.png')"/>
-          <h3 class='modal-text'>Ordine inviato. Attendi qualche minuto...</h3>
-        </div>
-        <b-button class="mt-2" variant="light" block @click="hideConfirmation">Ok</b-button>
+    <div
+      v-for="item in orderList"
+      :key="item.id"
+      @click="showItemDetails(index, item)"
+      class="cart-item">
+      <span class="item-quantity">{{item.quantity}}</span>
+      <span :class="getItemNameClass(item.status)">{{item.name}}</span>
+      <div class="item-details">
+        <span class="item-unitary-price" v-if="item.quantity>1">
+          {{item.quantity}} x {{formatPrice(item.price)}}
+        </span>
+        <span class="item-note">{{item.note}}</span>
       </div>
-
-      <div v-else>
-        <div class="d-block text-center">
-          <p class="place">{{$t('generic.place', {number: place})}}</p>
-          <p v-if="cartQuantity === 0">nessun prodotto selezionato</p>
-
-          <ul v-if="cartQuantity > 0" class="list">
-            <li v-for="item in cart" :key="item.id">
-              <span class="list-item">{{item.quantity}} x {{item.name}}</span>
-            </li>
-          </ul>
-          <span class='totale float-right'>{{getTotale()}}</span>
-        </div>
-        <div v-if="cartQuantity > 0">
-          <b-button rounded v-if="status != 'sending'" class="mt-2" variant="outline-success" block  @click="sendOrder">Invia</b-button>
-          <div v-if="status == 'sending'" class="text-center">
-            <b-spinner variant="secondary"></b-spinner><span>attendere...</span>
-          </div>
-        </div>
-      </div>
+      <span class="item-price">{{formatPrice(item.quantity * item.price)}}</span>
+    </div>
   </div>
 </template>
 
 <script>
-import Firebase from "../firebase.js";
-import Order from "../data/Order.js";
-import Conto from "../data/Conto.js";
+import Firebase from "../../firebase.js";
+import Order from "../../data/Order.js";
+import Conto from "../../data/Conto.js";
 import shoppingcart from '@/store/shoppingcart'
 
 export default {
-  props: ['place'],
+  props: ['orderList'],
   components: {
   },
   data() {
@@ -53,9 +41,10 @@ export default {
     }
   },
   methods: {
-    getIconUrl: function (pic) {
-      if (pic.length === 0) return require('../assets/img/po.png')
-      return require('../assets/icons/' + pic)
+    getItemNameClass: function(item_status) {
+      if(item_status == -100) {
+        return "item-name-crossed";
+      } else return "item-name";
     },
     sendOrder: function() {
       var order = new Order;
@@ -108,13 +97,6 @@ export default {
     formatPrice: function (price) {
       return Number(price).toFixed(2) + ' €'
     },
-    showConfirmation() {
-      this.status = 'sent';
-    },
-    hideConfirmation() {
-      this.status = 'idle';
-      this.$emit('confirmOrder');
-    },
   },
   mounted() {
   }
@@ -142,5 +124,67 @@ export default {
   font-size: 18px;
   font-weight: bold;
   color: var(--primary-color);
+}
+.cart-item {
+  display: flex;
+  width: 100%;
+  padding: 4px;
+  max-height: 60px;
+  min-height: 30px;
+  position: relative;
+  border-right: solid 5px rgba(155, 201, 155);
+  vertical-align: middle;
+}
+.item-quantity {
+  display: inline-block;
+  position: absolute;
+  background: var(--light-secondary-color);
+  border-radius: 6px;
+  text-align: center;
+  width: 24px;
+  height: 24px;
+  left: 2px;
+}
+.item-name {
+  text-align: left;
+  display: inline-block;
+  position: absolute;
+  max-width: 300px;
+  left: 40px;
+  font-weight: bold;
+}
+.item-name-crossed {
+  text-align: left;
+  display: inline-block;
+  position: absolute;
+  max-width: 300px;
+  left: 40px;
+  color: lightcoral;
+  font-weight: normal;
+  text-decoration: line-through;
+}
+.item-details {
+  display: flex;
+  position: absolute;
+  left: 40px;
+  top: 25px;
+  flex-direction: column;
+}
+.item-note {
+  color: var(--info-color);
+  font-size: 0.9em;
+}
+.item-unitary-price {
+  color: var(--info-color);
+  font-size: 0.9em;
+  font-weight: bold;
+}
+.item-price {
+  display: inline-block;
+  position: absolute;
+  right: 5px;
+  font-size: 1.0em;
+  color: var(--info2-color);
+  font-weight: bold;
 }
 </style>

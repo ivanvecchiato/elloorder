@@ -1,4 +1,5 @@
 import Firebase from "../firebase.js";
+import utils from "../utils.js";
 
 export default class Conto {
   constructor() {
@@ -161,6 +162,108 @@ export default class Conto {
     for (var i = 0; i < count; i++) {
       this.addItem(this.orderList[index])
     }
+  }
+
+  groupItem(p, list, params) {
+    var inserted = false;
+    for (var i = 0; i < list.length; i++) {
+      var item = list[i];
+
+      //      if(item.status == -100) {
+      //        break;
+      //      }
+
+      var priceCriteria = true;
+      var noteCriteria = true;
+      var variantCriteria = true;
+      var timingCriteria = true; // per controllare se un item è appena inserito
+      var statusCriteria = true; // per controllare gli elementi cancellati
+
+      if (params == undefined) {
+        if (item.note == undefined && p.note == undefined) {
+          noteCriteria = true;
+        } else {
+          noteCriteria = (item.note == p.note);
+        }
+
+        priceCriteria = (item.price == p.price);
+
+        if (item.modifiers == undefined && p.modifiers == undefined) {
+          variantCriteria = true;
+        } else {
+          variantCriteria = utils.arrayCompare(item.modifiers, p.modifiers);
+        }
+      } else {
+        if (params.groupNote != undefined && params.groupNote == true) {
+          noteCriteria = (item.note != undefined && p.note != undefined && item.note == p.note);
+        }
+        if (params.groupVariant != undefined && params.groupVariant == true) {
+          variantCriteria = utils.arrayCompare(item.modifiers, p.modifiers);
+        }
+      }
+
+      if (p.insertTime == undefined) {
+        if (item.insertTime == undefined)
+          timingCriteria = true;
+        else
+          timingCriteria = false;
+      }
+
+      if (p.status == -100) {
+        if (item.status == -100)
+          statusCriteria = true
+        else
+          statusCriteria = false
+      } else {
+        if (item.status == -100)
+          statusCriteria = false
+        else
+          statusCriteria = true
+      }
+
+      if (item.id === p.id &&
+        noteCriteria && variantCriteria &&
+        timingCriteria && statusCriteria && priceCriteria) {
+        item.quantity++;
+        item.insertIds.push(p.insertId);
+        inserted = true;
+        break;
+      }
+    }
+    if (!inserted) {
+      p.quantity = 1;
+      p.insertIds = [p.insertId];
+      list.push(Object.assign({}, p));
+    }
+  }
+
+  groupByItems(params) {
+    //console.log('groupByItems', params);
+    var list = [];
+    for (var i = 0; i < this.size(); i++) {
+      var item = this.orderList[i];
+      this.groupItem(item, list, params)
+    }
+
+    return list;
+  }
+
+  groupByTimestamp(params) {
+    var lists = [];
+    var prevTimestamp = 0;
+    for (var i = 0; i < this.size(); i++) {
+      var item = this.orderList[i];
+      if (prevTimestamp < item.insertTime) {
+        prevTimestamp = item.insertTime;
+        lists.push({
+          timestamp: prevTimestamp,
+          list: []
+        });
+      }
+      this.groupItem(item, lists[lists.length - 1].list, params)
+    }
+
+    return lists;
   }
 
   saveCache() {

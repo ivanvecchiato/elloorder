@@ -1,20 +1,12 @@
 <template>
   <div class="list-item">
-    <div class="card-left clearfix">
-      <div>
-        <div class='product'>{{data.name}}</div>
-        <div class="price" v-if="data.price != undefined">{{formatPrice(data.price)}}</div>
-        <div v-if="description != undefined && description.length > 0" class="description">
-          {{description}}
-        </div>
-        <div v-else>
-          <br/>
-        </div>
+    <div style="display: block">
+      <div class="color-indicator" :style="getBgc(data)"/>
+      <div class='product'>{{data.name}}</div>
+      <div class="round-price" v-if="data.price != undefined">{{formatPrice(data.price)}}</div>
+      <div v-else>
+        <br/>
       </div>
-    </div>
-
-    <div class="bottom" v-if="isOrder===true">
-      <span class='selector' @click.stop="incrementPartial()">+</span>
     </div>
   </div>
 </template>
@@ -25,52 +17,51 @@ export default {
   props: ['data', 'isOrder'],
   data() {
     return {
-      description: '',
       partial: 0,
-      item: {'id': this.data.id, 'quantity': 0, 'name': '', 'price': 0.0},
-      mainProps: { blankColor: '#777', height: 25, class: 'm1' }
+      item: {'id': this.data.id, 'quantity': 0, 'name': '', 'price': 0.0}
     }
   },
   methods: {
     formatPrice: function (price) {
       return Number(price).toFixed(2) + ' €'
     },
-    incrementPartial: function () {
-      this.partial++
-      this.emitEvent()
+    getBgc: function(item) {
+      if(item.properties.color != '') {
+        return "background: " + item.properties.color;
+      }
+      return '';
     },
-    decrementPartial: function () {
-      this.partial--;
-      if (this.partial < 0) this.partial = 0
-      this.emitEvent()
-    },
-    emitEvent: function () {
-      this.item.quantity = this.partial
-      this.item.name = this.data.name
-      this.item.price = this.data.price
-      this.$emit('change-value', this.item)
-    }
   },
   mounted() {
-    this.description = this.data.properties.short_description;
   },
 }
 </script>
 <style scoped>
 .product {
   text-align: left;
-  font-size: 25px;
+  font-size: 30px;
   z-index: 1000;
   color: var(--secondary-color);
   font-weight: bold;
   letter-spacing: -0.05em;
-  line-height: 25px;
+}
+.color-indicator {
+  width: 10px;
+  height: 100%;
+  background: white;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 .list-item {
   background-color: #fff;
-  margin-top: 25pt;
-  padding: 4pt;
-  border-radius: 10pt;
+  display: block;
+  margin-top: 10px;
+  padding: 16px;
+  border-radius: 10px;
+  position: relative;
   box-shadow: 4px 4px 5px rgba(226, 191, 191, 0.2);
 }
 .description {
@@ -81,10 +72,10 @@ export default {
   margin-top: 5px;
 }
 .round-price {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
   margin-top: 5px;
-  background: #ffffff;
+  background: var(--light-main-color);
   padding-right: 5px;
   padding-left: 5px;
   border-radius: 20px;
@@ -98,19 +89,7 @@ export default {
   margin-top: 5px;
   color:  var(--primary-color);
 }
-.quantity-button {
-  padding: 0pt;
-  font-weight: bold;
-  font-size: 26px;
-  text-align: center;
-  /*color: white;*/
-}
-.quantity {
-  padding: 0pt;
-  font-weight: normal;
-  font-size: 26px;
-  /*color: white;*/
-}
+
 .selector {
   display: inline-block;
   right: 10px;
@@ -136,12 +115,6 @@ export default {
   color: var(--info-color);
   border-radius: 30pt;
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.1);
-}
-.card-left {
-  display: flex;
-  flex-direction: row;
-  justify-content: top;
-  margin: 10px;
 }
 .bottom {
   position: relative;

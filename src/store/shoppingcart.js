@@ -24,6 +24,7 @@ var shoppingcart = {
         var newItem = {};
         newItem.id = obj.id
         newItem.name = obj.name
+        if(obj.quantity == undefined) obj.quantity = 1;
         newItem.quantity = obj.quantity
         newItem.price = obj.price
 

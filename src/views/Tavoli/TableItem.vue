@@ -1,8 +1,8 @@
 <template>
   <div class="table-item">
-    <div class="card-left clearfix">
+    <div>
+      <div class='table-name'>{{data.name}}</div>
       <div>
-        <div class='table-name'>{{data.name}}</div>
         <div v-if="tableBusy(data)">
           <div class="table-last-modification">
             <b-icon style="vertical-align: middle;" color="#000000" :size="18" icon="clock"></b-icon>
@@ -84,6 +84,7 @@ export default {
   letter-spacing: -0.05em;
   line-height: 25px;
 }
+
 .table-item {
   background-color: #fff;
   margin-top: 10px;
