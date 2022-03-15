@@ -88,7 +88,8 @@ export default {
 .table-item {
   background-color: #fff;
   margin-top: 10px;
-  padding: 4pt;
+  padding: 8pt;
+  min-height: 80px;
   border-radius: 10pt;
   box-shadow: 4px 4px 5px rgba(226, 191, 191, 0.2);
 }
