@@ -1,10 +1,13 @@
 <template>
    <div class="comanda">
       <div class="clearfix header">
-         <img style="float:left;margin:10px" width="35px" :src="getIconUrl('back.png')" @click="$router.go(-1)"/>
-         <span class="place" v-if="place != undefined">
-            {{place}}
-         </span>
+         <div style="float:left;margin:10px" >
+            <img width="35px" :src="getIconUrl('back.png')" @click="$router.go(-1)"/>
+            <span class="place" v-if="place != undefined">
+               {{place}}
+            </span>
+         </div>
+         <img style="float:right;margin:10px" width="35px" :src="getIconUrl('send.png')" @click="$router.go(-1)"/>
       </div>
 
       <div class="cart">
@@ -53,12 +56,20 @@ export default {
 </script>
 
 <style scoped>
-.header .place{
+.header {
+   vertical-align: middle;
+}
+.place{
    text-align: center;
    display: inline-block;
    font-size: 1.5em;
    font-weight: bold;
+   margin-left: 5px;
    color: var(--danger-color);
+   background: #fff;
+   border-radius: 30px;
+   padding-left: 10px;
+   padding-right: 10px;
 }
 .comanda {
    position: relative;
