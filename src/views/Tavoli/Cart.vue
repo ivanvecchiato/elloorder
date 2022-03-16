@@ -134,6 +134,7 @@ export default {
   position: relative;
   border-right: solid 5px rgba(155, 201, 155);
   vertical-align: middle;
+  color: var(--info-color);
 }
 .item-quantity {
   display: inline-block;
@@ -144,6 +145,7 @@ export default {
   width: 24px;
   height: 24px;
   left: 2px;
+  font-size: 1.2em;
 }
 .item-name {
   text-align: left;
@@ -151,7 +153,8 @@ export default {
   position: absolute;
   max-width: 300px;
   left: 40px;
-  font-weight: bold;
+  font-weight: normal;
+  font-size: 1.2em;
 }
 .item-name-crossed {
   text-align: left;
@@ -177,14 +180,13 @@ export default {
 .item-unitary-price {
   color: var(--info-color);
   font-size: 0.9em;
-  font-weight: bold;
+  font-weight: normal;
 }
 .item-price {
   display: inline-block;
   position: absolute;
   right: 5px;
   font-size: 1.0em;
-  color: var(--info2-color);
-  font-weight: bold;
+  font-weight: normal;
 }
 </style>
