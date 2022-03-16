@@ -85,7 +85,7 @@ export default {
       });
     },
     loadPlaces() {
-      var ref = Firebase.db.collection("park").orderBy('id');
+      var ref = Firebase.db.collection("park").orderBy('order');
       
       ref.onSnapshot((snapshotChange) => {
         this.park = [];
