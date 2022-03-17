@@ -88,7 +88,7 @@ export default {
         .catch((error) => {
           console.error("Error writing document: ", error);
         });
-        });
+      });
     },
     getTotale: function() {
       var value = shoppingcart.getTotale();
@@ -104,16 +104,6 @@ export default {
 </script>
 
 <style scoped>
-.list {
-  font-family: 'ProductSans';
-  text-align: left;
-}
-.list-item {
-  font-weight: normal;
-  font-size: 18px;
-  color: var(--info-color);
-
-}
 .place {
   margin: 10px;
   font-weight: bold;
@@ -130,9 +120,10 @@ export default {
   width: 100%;
   padding: 4px;
   max-height: 60px;
-  min-height: 30px;
+  min-height: 35px;
   position: relative;
-  border-right: solid 5px rgba(155, 201, 155);
+  /*border-right: solid 5px rgba(155, 201, 155);*/
+  border-bottom: solid 1px lightgray;;
   vertical-align: middle;
   color: var(--info-color);
 }
