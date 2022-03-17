@@ -1,21 +1,26 @@
 <template>
   <div class="table-item">
     <div>
-      <div class='table-name'>{{data.name}}</div>
-      <div>
+      <div class="card-left">
+        <div class='table-name'>{{data.name}}</div>
+      </div>
+
+      <div class="card-right">
         <div v-if="tableBusy(data)">
           <div class="table-last-modification">
             <b-icon style="vertical-align: middle;" color="#000000" :size="18" icon="clock"></b-icon>
               {{getLastMod(data.conto)}}
           </div>
-            <div class="table-order-amount">
-              <b-icon style="vertical-align: middle;" color="#FB8C00" :size="18" icon="wallet2"/>
+          <div class="table-show-details">
+            <span class="table-order-amount">
+              <b-icon color="#6f788d" :size="18" icon="wallet2"/>
               {{getAmount(data.conto)}}
-            </div>
-            <div class="table-order-quantity">
-              <b-icon style="vertical-align: middle;" color="#667BCC" :size="18" icon="cart4"/>
+            </span>
+            <span class="table-order-quantity">
+              <b-icon color="#ff6b6b" :size="18" icon="cart4"/>
               {{getQuantity(data.conto)}} {{$t('product.products')}}
-            </div>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -75,6 +80,15 @@ export default {
 }
 </script>
 <style scoped>
+.card-left {
+  float: left;
+  text-align: center;
+  width: 30%;
+}
+.card-right {
+  float: left;
+  text-align: right;
+}
 .table-name {
   text-align: left;
   font-size: 2em;
@@ -84,65 +98,33 @@ export default {
   letter-spacing: -0.05em;
   line-height: 25px;
 }
-
 .table-item {
   background-color: #fff;
   margin-top: 10px;
-  padding: 8pt;
-  min-height: 80px;
+  padding: 8px;
+  min-height: 90px;
   border-radius: 10pt;
   box-shadow: 4px 4px 5px rgba(226, 191, 191, 0.2);
 }
 
-.round-price {
-  font-size: 12px;
-  font-weight: bold;
-  margin-top: 5px;
-  background: #ffffff;
+.table-order-amount {
   padding-right: 5px;
   padding-left: 5px;
   border-radius: 20px;
-  color:  var(--primary-color);
+  border: solid 1px var(--info-color);
+  vertical-align: middle;
+  color:  var(--info-color);
   text-align: center;
-  max-width: 60px;
 }
-.price {
-  font-size: 12px;
-  font-weight: bold;
-  margin-top: 5px;
-  color:  var(--primary-color);
-}
-.quantity {
-  padding: 0pt;
-  font-weight: normal;
-  font-size: 26px;
-  /*color: white;*/
-}
-.selector {
-  display: inline-block;
-  right: 10px;
-  bottom: 10px;
-  width:35px;
-  height: 35px;
-  font-weight: 500;
-  font-size: 26px;
-  margin: auto;
-  line-height: 35px;
+.table-order-quantity {
+  padding-right: 5px;
+  padding-left: 5px;
+  border-radius: 20px;
+  margin-left: 10px;
+  vertical-align: middle;
+  border: solid 1px var(--danger-color);
+  color:  var(--danger-color);
   text-align: center;
-  background: var(--secondary-color);
-  color: #fff;
-  border-radius: 50%;
-  box-shadow: 4px 4px 5px rgba(214, 154, 104, 0.1);
-}
-.number-selector {
-  width:150px; 
-  margin:0px auto;
-  bottom:0px; 
-  margin-bottom: 0px;
-  background: var(--tertiary-color);
-  color: var(--info-color);
-  border-radius: 30pt;
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.1);
 }
 .card-left {
   display: flex;
@@ -158,9 +140,9 @@ export default {
   font-weight: bold;
 }
 .table-show-details {
-  display: block;
-  bottom: 5px;
-  right: 15px;
+  margin-top: 10px;
+  font-size: 1.1em;
+  color: var(--info-color);
 }
 
 </style>

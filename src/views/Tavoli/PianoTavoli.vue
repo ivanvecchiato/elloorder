@@ -36,7 +36,11 @@ export default {
         name: 'Comanda',
         params: {
           'item': item,
-          'place': this.area.name + ' - ' +item.name
+          'placeString': this.area.name + ' - ' +item.name,
+          'place': JSON.stringify({
+            'docId': this.area.docId,
+            'key': item.key
+          })
         }
       });
     },
