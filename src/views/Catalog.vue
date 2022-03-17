@@ -41,11 +41,12 @@ import products from '../store/products';
 import Details from './Details.vue'
 
 export default {
-  props: ['place', 'selectedCategory'],
+  props: [],
   data() {
     return {
       products: [],
       categorie: [],
+      selectedCategory: null,
       notes: '',
       currentItem: null
     };
@@ -63,8 +64,20 @@ export default {
       this.$refs['cart-modal'].hide()
       this.reset();
     },
+    replacer: function(key, value) {
+      if (key=="barcodes") return undefined;
+      else if (key=="properties") return undefined;
+      else if (key=="inventory") return undefined;
+      else if (key=="long_description") return undefined;
+      else if (key=="short_description") return undefined;
+      else if (key=="cost") return undefined;
+      else return value;
+    },
     addOrder(item) {
-      this.$emit('addItem', item);
+      let tmp = JSON.stringify(item, this.replacer);
+      let obj = JSON.parse(tmp);
+      console.log('addOrder', obj)
+      this.$emit('addItem', obj);
     },
     showDetails: function(item) {
       if(item.long_description.length == 0)
@@ -86,7 +99,6 @@ export default {
   mounted() {
     this.categorie = categories.getList();
     this.selectProducts(this.selectedCategory);
-    console.log('place:' + this.place)
   }
 };
 </script>
