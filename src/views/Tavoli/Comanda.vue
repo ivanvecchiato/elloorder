@@ -3,11 +3,11 @@
       <div class="clearfix header">
          <div style="float:left;margin:10px" >
             <img width="35px" :src="getIconUrl('back.png')" @click="$router.go(-1)"/>
-            <span class="place" v-if="place != undefined">
-               {{place}}
+            <span class="place" v-if="placeString != undefined">
+               {{placeString}}
             </span>
          </div>
-         <img style="float:right;margin:10px" width="35px" :src="getIconUrl('send.png')" @click="$router.go(-1)"/>
+         <img style="float:right;margin:10px" width="35px" :src="getIconUrl('send.png')" @click="sendOrder()"/>
       </div>
 
       <div class="cart">
@@ -25,11 +25,12 @@
 <script>
 import Catalog from '../Catalog.vue';
 import Cart from './Cart.vue';
+import axios from 'axios'
 
 export default {
   components: { Catalog, Cart },
    name: 'Comanda',
-   props: ['place', 'item'],
+   props: ['place', 'item', 'placeString'],
    data() {
       return {
          
@@ -41,6 +42,17 @@ export default {
       },
    },
    methods: {
+      sendOrder() {
+         var p = JSON.parse(this.place);
+         this.item.conto.place = p; 
+         axios.post('http://127.0.0.1:8088/bill', this.item.conto)
+           .then(function (response) {
+             console.log(response);
+           })
+           .catch(function (error) {
+             console.log(error);
+           });
+      },
       addItem: function(item) {
          this.item.conto.addItem(item);
       },
@@ -76,8 +88,10 @@ export default {
 }
 .cart {
    background: white;
+   margin: 5px 5px 10px 5px;
+   border: solid 1px lightgray;
+   border-radius: 10px;
    height: calc(30vh - 2px);
-   margin-bottom: 20px;
    overflow: scroll;
 }
 .catalog {
