@@ -12,21 +12,6 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/info',
-    name: 'Info',
-    component: () => import('../views/Info.vue')
-  },
-  {
-    path: '/listino',
-    name: 'ConfigListino',
-    component: () => import('../views/Admin/ConfigListino.vue')
-  },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: () => import('../views/Admin/Admin.vue')
-  },
-  {
     path: '/details',
     name: 'Details',
     props: true,
