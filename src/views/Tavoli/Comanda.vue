@@ -3,14 +3,14 @@
       <div class="clearfix header">
          <div style="float:left;margin:10px" >
             <img width="35px" :src="getIconUrl('back.png')" @click="$router.go(-1)"/>
+         </div>
             <span class="place" v-if="placeString != undefined">
                {{placeString}}
             </span>
-         </div>
          <img style="float:right;margin:10px" width="35px" :src="getIconUrl('send.png')" @click="sendOrder()"/>
       </div>
 
-      <div class="cart">
+      <div class="cart" id="cart">
          <cart :orderList="groupedList"></cart>
       </div>
 
@@ -55,6 +55,11 @@ export default {
       },
       addItem: function(item) {
          this.item.conto.addItem(item);
+         this.scrollToBottom();
+      },
+      scrollToBottom() {
+         const container = this.$el.querySelector("#cart");
+         container.scrollTop = container.scrollHeight;
       },
       getIconUrl: function (pic) {
          if (pic.length === 0) return require('@/assets/img/po.png')
@@ -70,6 +75,7 @@ export default {
 <style scoped>
 .header {
    vertical-align: middle;
+   text-align: center;
 }
 .place{
    text-align: center;
@@ -87,7 +93,7 @@ export default {
    position: relative;
 }
 .cart {
-   background: white;
+   background: transparent;
    margin: 5px 5px 10px 5px;
    border: solid 1px lightgray;
    border-radius: 10px;

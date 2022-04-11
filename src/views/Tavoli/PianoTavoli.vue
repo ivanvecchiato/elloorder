@@ -1,13 +1,11 @@
 <template>
   <div class="piano">
-    <p class='title'>{{area.name}}</p>
-    <div :style="setColor(area.color)">
+    <!--<p class='title'>{{area.name}}</p>-->
     <ul class="list -unstyled">
       <li v-for="item in area.places" :key="item.name" @click="openAccount(item)" class="table">
         <table-item :data='item'></table-item>
       </li>
     </ul>
-    </div>
 
   </div>
 </template>
@@ -44,9 +42,6 @@ export default {
         }
       });
     },
-    setColor: function(color) {
-      return "border-left: solid 5px " + color;
-    },
     loadPlaces: function() {
         console.log(this.area)
     }
@@ -71,6 +66,7 @@ a {
 }
 .piano {
   padding: 10px;
+  overflow: scroll;
 }
 .title {
   margin-top: 10px;

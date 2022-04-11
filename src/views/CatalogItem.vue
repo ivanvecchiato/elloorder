@@ -81,7 +81,7 @@ export default {
   border-radius: 20px;
   color:  var(--primary-color);
   text-align: center;
-  max-width: 60px;
+  max-width: 80px;
 }
 .price {
   font-size: 12px;

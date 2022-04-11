@@ -144,7 +144,8 @@ export default {
   position: absolute;
   max-width: 300px;
   left: 40px;
-  font-weight: normal;
+  font-weight: bold;
+  letter-spacing: -1.5px;
   font-size: 1.2em;
 }
 .item-name-crossed {

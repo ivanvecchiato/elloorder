@@ -92,19 +92,20 @@ export default {
 .table-name {
   text-align: left;
   font-size: 2em;
-  z-index: 1000;
+  z-index: 100;
   color: var(--secondary-color);
   font-weight: bold;
   letter-spacing: -0.05em;
   line-height: 25px;
 }
 .table-item {
-  background-color: #fff;
+  background-color: rgb(255, 248, 241);
   margin-top: 10px;
   padding: 8px;
   min-height: 90px;
   border-radius: 10pt;
-  box-shadow: 4px 4px 5px rgba(226, 191, 191, 0.2);
+  border: solid 1px rgb(248, 222, 216);
+  box-shadow: 4px 4px 5px rgba(226, 191, 191, 0.4);
 }
 
 .table-order-amount {

@@ -1,9 +1,26 @@
 <template>
   <div class="home">
-    <div class="clearfix header">
-    </div>
+    <b-navbar class="header" sticky>
+      <div style="width: 100%">
+      <b-dropdown v-if="park.length > 0"
+        id="dropdown-1"
+        size="lg"
+        :text="currentArea.name"
+        :style="setColor(currentArea.color)">
+        <b-dropdown-item
+          z-index="100"
+          class="dropdown"
+          v-for="area in park"
+          :key="area.id"
+          @click="selectArea(area)">
+            {{area.name}}
+        </b-dropdown-item>
+      </b-dropdown>
 
-    <vue-horizontal class="horizontal-selectors">
+      </div>
+    </b-navbar>
+
+    <vue-horizontal class="horizontal-selectors" v-if="false">
       <div v-for="area in park"
         class="horizontal-selector"
         :key="area.id"
@@ -13,6 +30,7 @@
     </vue-horizontal>
 
     <piano-tavoli
+      class="piano"
       v-if="dataLoaded"
       :area="currentArea"
       @refresh="refresh"/>
@@ -27,6 +45,7 @@ import VueHorizontal from 'vue-horizontal';
 import products from '../store/products'
 import categories from '../store/categories'
 import Conto from "@/data/Conto.js";
+import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -68,21 +87,41 @@ export default {
         this.categorie.push(c);
       }
     },
-    loadProducts() {
-      var ref = Firebase.db.collection("products")
-      .where("status", "==", 1);
-      
-      ref.onSnapshot((snapshotChange) => {
-        this.categorie = [];
-        var items = []
-        snapshotChange.forEach((doc) => {
-          var p = doc.data();
-          items.push(p);
-          this.addCategoryIfNew(p.category);
-        })
-        categories.setList(this.categorie);
-        products.setProducts(items);
-      });
+    setColor: function(color) {
+      return "background: " + color + ";";
+    },
+    loadProducts(local) {
+      if(local == true) {
+        var self = this;
+        axios.post('http://127.0.0.1:8088/getproducts')
+          .then(function (response) {
+            self.categorie = [];
+            var prods = response.data;
+            for(var j=0; j<prods.length; j++) {
+              self.addCategoryIfNew(prods[j].category);
+            }
+            categories.setList(self.categorie);
+            products.setProducts(prods)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        var ref = Firebase.db.collection("products")
+        .where("status", "==", 1);
+
+        ref.onSnapshot((snapshotChange) => {
+          this.categorie = [];
+          var items = []
+          snapshotChange.forEach((doc) => {
+            var p = doc.data();
+            items.push(p);
+            this.addCategoryIfNew(p.category);
+          })
+          categories.setList(this.categorie);
+          products.setProducts(items);
+        });
+      }
     },
     loadPlaces() {
       var ref = Firebase.db.collection("park").orderBy('order');
@@ -127,7 +166,7 @@ export default {
   },
   mounted() {
     this.loadPlaces();
-    this.loadProducts();
+    this.loadProducts(true);
   },
 }
 </script>
@@ -139,7 +178,9 @@ export default {
   width: 100%;
   min-height: 100vh;
 }
-
+.header {
+  padding: 0px;
+}
 .horizontal-selectors {
     padding: 10px;
 }
@@ -162,5 +203,21 @@ export default {
   font-weight: bold;
   font-size: 20px;
   color: var(--secondary-color);
+}
+.indicator {
+  height: 6px;
+  width: 100%;
+}
+#dropdown-1 {
+  margin: 2px;
+}
+.dropdown {
+  background-color: #ffffff;
+  font-size: 1.5em;
+  margin: 10px;
+  width: 100%;
+}
+.piano {
+  overflow: scroll;
 }
 </style>
