@@ -13,13 +13,15 @@
       </div>
     </vue-horizontal>
 
-    <ul class="list -unstyled">
-      <li v-for="item in products" :key="item.id" @click="addOrder(item)">
-        <catalog-item
-          :data='item'>
-        </catalog-item>
-      </li>
-    </ul>
+    <div class="products">
+      <ul class="list -unstyled">
+        <li v-for="item in products" :key="item.id" @click="addOrder(item)">
+          <catalog-item
+            :data='item'>
+          </catalog-item>
+        </li>
+      </ul>
+    </div>
 
     <div class="footer"></div>
 
@@ -92,7 +94,7 @@ export default {
     selectProducts: function(categoryId) {
       //console.log("selectProducts", index);
       this.selectedCategory = categoryId;
-       this.products = products.getProducts(categoryId);
+      this.products = products.getProducts(categoryId);
     }
   },
 
